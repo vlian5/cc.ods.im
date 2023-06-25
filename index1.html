@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>在线生成二维码</title>
+
+</head>
+<body>
+	<h2>二维码在线生成</h2>
+	<input id="text" type="text"/>
+	<input id="button" value="马上生成" type="button"/>
+	<div id="qrcode" style="margin-top:10px;"></div>
+	
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+<script type="text/javascript">
+	var qrcode;
+	$("#button").on("click",function(){	
+		$('#qrcode').html("");
+		var t = $("#text").val();
+		if(t == "" || t == null || t == undefined){
+			alert("请输入所要生成的二维码!");
+			return;
+		}
+		//使用qrcode.min.js生成二维码
+		// qrcode = new QRCode("qrcode",{
+		//	  text: utf16to8(t),
+		//   width: 200, //生成的二维码的宽度
+		//   height: 200, //生成的二维码的高度
+		//   colorDark : "#000000", // 生成的二维码的深色部分
+		//   colorLight : "#ffffff", //生成二维码的浅色部分
+		//   correctLevel : QRCode.CorrectLevel.H
+		//});
+		//使用jQuery.qrcode.min.js生成二维码
+		var qrcode = $("#qrcode").qrcode({
+			render:"table",//table方式
+			width:200,
+			height:200,
+			text:utf16to8(t)
+		});
+		
+	});
+	
+//解决中文乱码
+function utf16to8(str) {
+	var out, i, len, c;
+	out = "";
+	len = str.length;
+	for (i = 0; i < len; i++) {
+	　　c = str.charCodeAt(i);
+	　　if ((c >= 0x0001) && (c <= 0x007F)) {
+	　　　　out += str.charAt(i);
+	　　} else if (c > 0x07FF) {
+	　　　　out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+	　　　　out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+	　　　　out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+	　　} else {
+	　　　　out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+	　　　　out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+	　　}
+	}
+	return out;
+} 
+</script>
+</body>
+</html>
